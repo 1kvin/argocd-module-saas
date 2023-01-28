@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: app1-appset # Наш ApplicationSet описывает одно приложение
+  namespace: argocd
+spec:
+  generators:
+  - git: # Файлы конфигурации
+      repoURL: https://github.com/1kvin/argocd-module-saas.git
+      revision: implementation1
+      files:
+      - path: "cluster-config/module1/*.json" # Берём все файлы .json из папки конфигурации нашего модуля
+  template:
+    metadata:
+      name: 'app1-{{destination.namespace}}' # Названия приложений не должны пересекатся внутри ArgoCD, поэтому делаем их уникальными
+    spec:
+      project: default
+      source:  # Вставляем параметры, откуда берём приложение
+        repoURL: '{{source.repoURL}}'
+        targetRevision: '{{source.targetRevision}}'
+        path: '{{source.path}}'
+      destination: # Вставляем параметры развертывания приложения
+        server: '{{destination.server}}'
+        namespace: '{{destination.namespace}}'
+      syncPolicy:
+        automated:
+          prune: true # Автоматически удаляем
+          selfHeal: true  # И востанавливаем
+        syncOptions:
+        - CreateNamespace=true # Создаём namespace, если его нет

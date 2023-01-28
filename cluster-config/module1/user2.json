@@ -1,0 +1,13 @@
+{
+    "destination":
+    {
+        "server" : "https://kubernetes.default.svc",
+        "namespace" : "user2"
+    },
+    "source":
+    {
+        "repoURL" : "https://github.com/argoproj/argo-cd.git",
+        "path" : "applicationset/examples/git-generator-files-discovery/apps/guestbook",
+        "targetRevision" : "HEAD"
+    }
+}
