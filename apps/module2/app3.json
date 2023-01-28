@@ -1,0 +1,6 @@
+{
+    "appName" : "app3",
+    "appRepoURL" : "https://github.com/argoproj/argocd-example-apps/",
+    "appPath" : "helm-guestbook",
+    "appTargetRevision" : "HEAD"
+}

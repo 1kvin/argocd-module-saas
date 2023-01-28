@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet # Наш ApplicationSet описывает все модули
+metadata:
+  name: modules-appset
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - matrix:
+        generators:
+          # Список модулей
+          - list:
+              elements:
+              - moduleName: module1
+              - moduleName: module2
+          # Соеднияем файлы конфигурации и список приложений
+          - matrix:
+              generators:
+                # Файлы конфигурации
+                - git:
+                    repoURL: 'https://github.com/1kvin/argocd-module-saas.git'
+                    revision: implementation4
+                    files:
+                      - path: 'cluster-config/{{.moduleName}}/*.json'
+                # Список приложений в модуле и их параметров
+                - git:
+                    repoURL: 'https://github.com/1kvin/argocd-module-saas.git'
+                    revision: implementation4
+                    files:
+                      - path: 'apps/{{.moduleName}}/*.json'
+
+  template:
+    metadata:
+      name: '{{.appName}}-{{.destination.namespace}}'
+    spec:
+      project: default
+      source:
+        repoURL: '{{.appRepoURL}}'
+        targetRevision: '{{.appTargetRevision}}'
+        path: '{{.appPath}}'
+      destination:
+        server: '{{.destination.server}}'
+        namespace: '{{.destination.namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
