@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: module2-appset # Наш ApplicationSet описывает один модуль
+  namespace: argocd
+spec:
+  generators:
+    # Комбинируем файлы конфигурации и список приложений
+    - matrix:
+        generators:
+          # Файлы конфигурации
+          - git:
+              repoURL: 'https://github.com/1kvin/argocd-module-saas.git'
+              revision: implementation2
+              files:
+                - path: cluster-config/module2/*.json
+          # Список приложений в модуле и их параметров
+          - list:
+              elements:
+              - app-name: app3
+                app-repoURL: https://github.com/argoproj/argocd-example-apps/
+                app-path: helm-guestbook
+                app-targetRevision: HEAD
+  template:
+    metadata:
+      name: '{{app-name}}-{{destination.namespace}}'
+    spec:
+      project: default
+      source: # Берём значение из list generator
+        repoURL: '{{app-repoURL}}'
+        targetRevision: '{{app-targetRevision}}'
+        path: '{{app-path}}'
+      destination: # Берём значение из git generator
+        server: '{{destination.server}}'
+        namespace: '{{destination.namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
