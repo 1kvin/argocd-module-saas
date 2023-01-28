@@ -1,0 +1,7 @@
+{
+    "destination":
+    {
+        "server" : "https://kubernetes.default.svc",
+        "namespace" : "user1"
+    }
+}
