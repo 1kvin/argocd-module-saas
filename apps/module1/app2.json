@@ -2,5 +2,6 @@
     "appName" : "app2",
     "appRepoURL" : "https://github.com/argoproj/argocd-example-apps/",
     "appPath" : "guestbook",
-    "appTargetRevision" : "HEAD"
+    "appTargetRevision" : "HEAD",
+    "databases" : [ ]
 }

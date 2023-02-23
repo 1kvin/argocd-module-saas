@@ -2,5 +2,6 @@
     "appName" : "app1",
     "appRepoURL" : "https://github.com/argoproj/argo-cd.git",
     "appPath" : "applicationset/examples/git-generator-files-discovery/apps/guestbook",
-    "appTargetRevision" : "HEAD"
+    "appTargetRevision" : "HEAD",
+    "databases" : [ "app1-db"]
 }

@@ -1,0 +1,19 @@
+[
+    {
+        "user" : "user1",
+        "server" : "https://kubernetes.default.svc",
+        "namespace" : "user1",
+        "modules" : [
+            "module1",
+            "module2"
+        ]
+    },
+    {
+        "user" : "user2",
+        "server" : "https://kubernetes.default.svc",
+        "namespace" : "user2",
+        "modules" : [
+            "module1"
+        ]
+    }
+]
